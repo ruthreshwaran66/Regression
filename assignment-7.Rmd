@@ -1,0 +1,125 @@
+---
+title: "ASSIGNMENT-7"
+author: "RUTHRESHWARAN M"
+date: "2023-05-4"
+output:
+html_document: default
+---
+
+```{r}
+
+library(haven)
+datatibble1 <- read_sav("Raw/chap8data.sav")
+datatibble1
+
+freq_table <- table(datatibble1$jobsatcomp)
+freq_table
+
+summary(datatibble1$jobsatcomp)
+freq_table1 <- table(datatibble1$voice1)
+freq_table1
+summary(datatibble1$voice1)
+
+library(psych)
+
+describe(datatibble1$jobsatcomp)
+describe(datatibble1$voice1)
+hist(datatibble1$jobsatcomp)
+
+hist(datatibble1$voice1)
+
+plot(datatibble1$voice1, datatibble1$jobsatcomp)
+
+cor(datatibble1$voice1, datatibble1$jobsatcomp, method = "pearson", use = "complete.obs")
+
+cor.test(datatibble1$voice1, datatibble1$jobsatcomp, method = "pearson")
+
+library(tidyverse)
+
+datatibble2 <- tibble(datatibble1$jobsatcomp)
+
+datatibble2$voice1 <- datatibble1$voice1
+datatibble2$voice2 <- datatibble1$voice2
+datatibble2$voice3 <- datatibble1$voice3
+datatibble2$voice4 <- datatibble1$voice4
+
+datatibble2
+cor(datatibble2, use="complete.obs")
+library(rstatix)
+library(tidyverse)
+
+cor_mat1 <- cor_mat(datatibble2)
+cor_mat1
+
+
+cor_mat1 %>% cor_get_pval()
+
+
+```
+
+Simple Linear Regression:
+
+```{r}
+
+datatibble3 <- datatibble1 %>% 
+  filter(!is.na(voice1))
+
+
+model <- lm(datatibble3$jobsatcomp ~ datatibble3$voice1)
+model
+
+summary(model)
+
+datatibble4 <- datatibble1 %>% 
+  filter(!is.na(voice2))
+
+
+model1 <- lm(datatibble4$jobsatcomp ~ datatibble4$voice2)
+model1
+
+summary(model1)
+
+datatibble5 <- datatibble1 %>% 
+  filter(!is.na(voice3))
+
+
+model2 <- lm(datatibble5$jobsatcomp ~ datatibble5$voice3)
+model2
+
+summary(model2)
+
+datatibble6 <- datatibble1 %>% 
+  filter(!is.na(voice4))
+
+
+model3 <- lm(datatibble6$jobsatcomp ~ datatibble6$voice4)
+model3
+
+summary(model3)
+
+```
+
+Summary:
+
+Pearson's r and Simple Regression:
+
+These are two ways of expressing the nature of the relationship between X and Y when both variables are ordinal or preferably scale level. Both test are used when the relationship between the dependent and independent variable is linear. The result of both test is the coefficient. 
+
+In the case of Pearson's r, the coefficient is standardized between -1 and +1. 
+In the case of a simple regression, it is Beta or the independent variable's coefficient.
+
+In both test, a positive coefficient implies a positive relationship between X and Y. So, as values in X increase, so do values in Y. 
+A negative coefficient implies a negative relationship between X and Y. So as values in X increase, values in Y simultaneously decrease. 
+Here, we cannot say that X causes Y, but we can conclude that X is associated with Y (or correlated with Y) provided that the p-value attached to these coefficients is < 0.05.
+
+The lower the p-value, the more confident we are that the positive or negative relationship we found generalizes to the population. If the coefficients equal to approximately zero, then the p-value will very likely be non significant which will imply that there is no linear relationship between X and Y. i.e., we would be unable to make that quantum leap from the sample to the population.
+
+But in real time, there are more than one variable is associated with Y. So to model real-life relationships, bivariate correlations are not enough because real life is more complex. So we need to use multivariate tests.
+Some of them are multiple regression, logistic regression, factor analysis, structural equation modelling.
+
+
+
+
+
+  
+
